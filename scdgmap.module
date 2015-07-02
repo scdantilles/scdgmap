@@ -1,0 +1,59 @@
+<?php
+
+function scdgmap_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#scdgmap":
+      return '<p>' . t("Help text") . '</p>';
+      break;
+  }
+} 
+
+function scdgmap_menu() {
+  $items[] = array(
+    'path' => 'libraries-map',
+    'title' => 'Carte des bibliotheques',
+    'page callback' => 'scdgmap_libraries',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+function scdgmap_libraries() {
+
+  $libraries = array();
+
+  $nodes = node_load_multiple(array(), array('type' => 'library'));
+
+  foreach ($nodes as $node) {
+    if (!array_key_exists(LANGUAGE_NONE, $node->field_lat_lon))
+      continue;
+
+    $coords = explode(',', $node->field_lat_lon[LANGUAGE_NONE][0]['value']);
+
+    $libraries[] = array(
+      'name' => 'Foo',
+      'lat'  => $coords[0],
+      'lon'  => $coords[1],
+    );
+  }
+
+  return theme('scdgmap_output', array(
+    'message' => "Foo",
+    'libraries' => $libraries,
+  ));
+}
+
+function scdgmap_theme($existing, $type, $theme, $path) {
+  return array(
+    'scdgmap_output' => array(
+      'variables' => array(
+        'message' => 'F',
+        'libraries' => array(),
+      ),
+      'template' => 'scdgmap-output',
+    ),
+  );
+}
+
+?>

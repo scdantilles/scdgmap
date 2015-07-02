@@ -1,0 +1,4 @@
+name = SCD GMap
+description = "Create a page showing a Google Map with pins for each library"
+package = SCD
+core = 7.x
