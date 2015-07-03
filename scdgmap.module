@@ -9,20 +9,17 @@ function scdgmap_help($path, $arg) {
 } 
 
 function scdgmap_menu() {
-  $items[] = array(
-    'path' => 'libraries-map',
+  $items['libraries-map'] = array(
     'title' => 'Carte des bibliotheques',
     'page callback' => 'scdgmap_libraries',
+    'page arguments' => array(1),
     'access callback' => TRUE,
   );
 
   return $items;
 }
 
-function scdgmap_libraries() {
-
-  $pole = 11;
-
+function scdgmap_libraries($pole) {
   $query = new EntityFieldQuery();
   
   $query->entityCondition('entity_type', 'node')
@@ -33,11 +30,13 @@ function scdgmap_libraries() {
   
   $result = $query->execute();
   
+  $nodes= array();
   if (isset($result['node'])) {
     $nids = array_keys($result['node']);
     $nodes = entity_load('node', $nids);
   }
 
+  $libraries = array();
   foreach ($nodes as $node) {
     $coords = explode(',', $node->field_lat_lon[LANGUAGE_NONE][0]['value']);
 
