@@ -26,8 +26,7 @@
 
   for (i = 0; i < locations.length; i++) {
 
-    var loc = locations[i];
-    var position = new google.maps.LatLng(loc.lat, loc.lon);
+    var position = new google.maps.LatLng(locations[i].lat, locations[i].lon);
 
     bounds.extend(position);
 
@@ -38,7 +37,7 @@
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function() {
-        infowindow.setContent('<a href="' + loc.url + '">' + loc.name + '</a>');
+        infowindow.setContent('<a href="' + locations[i].url + '">' + locations[i].name + '</a>');
         infowindow.open(map, marker);
       }
     })(marker, i));
