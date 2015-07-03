@@ -3,11 +3,14 @@
 <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
   var locations = [
-    <?php
-    foreach($libraries as $lib) {
-      echo "['" . $lib['name'] . "', " . $lib['lat'] . ", " . $lib['lon'] . ", '" . $lib['url'] . "'],";
-    }
-    ?>
+    <?php foreach($libraries as $lib): ?>
+      {
+        name:'<?php echo $lib['name'];?>',
+        lat:  <?php echo $lib['lat' ];?>,
+        lon:  <?php echo $lib['lon' ];?>,
+        url: '<?php echo $lib['url' ];?>',
+      },
+    <?php endforeach; ?>
   ];
 
   var bounds = new google.maps.LatLngBounds();
@@ -23,7 +26,8 @@
 
   for (i = 0; i < locations.length; i++) {
 
-    var position = new google.maps.LatLng(locations[i][1], locations[i][2]);
+    var loc = locations[i];
+    var position = new google.maps.LatLng(loc.lat, loc.lon);
 
     bounds.extend(position);
 
@@ -34,7 +38,7 @@
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function() {
-        infowindow.setContent('<a href="' + locations[i][3] + '">' + locations[i][0] + '</a>');
+        infowindow.setContent('<a href="' + loc.url + '">' + loc.name + '</a>');
         infowindow.open(map, marker);
       }
     })(marker, i));
