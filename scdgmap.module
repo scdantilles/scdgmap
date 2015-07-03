@@ -21,25 +21,34 @@ function scdgmap_menu() {
 
 function scdgmap_libraries() {
 
-  $libraries = array();
+  $pole = 11;
 
-  $nodes = node_load_multiple(array(), array('type' => 'library'));
+  $query = new EntityFieldQuery();
+  
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'library')
+    ->fieldCondition('field_lat_lon', 'value', 'NULL', '!=')
+    ->fieldCondition('field_pole', 'tid', $pole)
+    ->propertyCondition('status', NODE_PUBLISHED);
+  
+  $result = $query->execute();
+  
+  if (isset($result['node'])) {
+    $nids = array_keys($result['node']);
+    $nodes = entity_load('node', $nids);
+  }
 
   foreach ($nodes as $node) {
-    if (!array_key_exists(LANGUAGE_NONE, $node->field_lat_lon))
-      continue;
-
     $coords = explode(',', $node->field_lat_lon[LANGUAGE_NONE][0]['value']);
 
     $libraries[] = array(
-      'name' => 'Foo',
+      'name' => 'foo',
       'lat'  => $coords[0],
       'lon'  => $coords[1],
     );
   }
 
   return theme('scdgmap_output', array(
-    'message' => "Foo",
     'libraries' => $libraries,
   ));
 }
@@ -48,7 +57,6 @@ function scdgmap_theme($existing, $type, $theme, $path) {
   return array(
     'scdgmap_output' => array(
       'variables' => array(
-        'message' => 'F',
         'libraries' => array(),
       ),
       'template' => 'scdgmap-output',
