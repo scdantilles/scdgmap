@@ -5,7 +5,7 @@
   var locations = [
     <?php
     foreach($libraries as $lib) {
-      echo "['" . $lib['name'] . "', " . $lib['lat'] . ", " . $lib['lon'] . "],";
+      echo "['" . $lib['name'] . "', " . $lib['lat'] . ", " . $lib['lon'] . ", '" . $lib['url'] . "'],";
     }
     ?>
   ];
@@ -34,7 +34,7 @@
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
       return function() {
-        infowindow.setContent(locations[i][0]);
+        infowindow.setContent('<a href="' + locations[i][3] + '">' + locations[i][0] + '</a>');
         infowindow.open(map, marker);
       }
     })(marker, i));

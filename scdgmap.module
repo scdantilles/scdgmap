@@ -10,7 +10,7 @@ function scdgmap_help($path, $arg) {
 
 function scdgmap_menu() {
   $items['libraries-map'] = array(
-    'title' => 'Carte des bibliotheques',
+    'title' => 'Carte des bibliothèques',
     'page callback' => 'scdgmap_libraries',
     'page arguments' => array(1),
     'access callback' => TRUE,
@@ -41,7 +41,8 @@ function scdgmap_libraries($pole) {
     $coords = explode(',', $node->field_lat_lon[LANGUAGE_NONE][0]['value']);
 
     $libraries[] = array(
-      'name' => 'foo',
+      'name' => addslashes($node->title),
+      'url'  => '/node/' . $node->nid,
       'lat'  => $coords[0],
       'lon'  => $coords[1],
     );
